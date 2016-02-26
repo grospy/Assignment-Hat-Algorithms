@@ -1,28 +1,37 @@
+import java.util.Arrays;
 import java.util.Random;
 
 
 
 public class Hat<T> {
-	private T[] elements;
+	private Object[] elements;
 	private int N;
-	private final int size = 4;
 	private Object obj;
 	
 	public Hat() {
-		elements = (T[]) new Object[size];
+		elements = new Object[3];
+		N = 0;
     }
+
 	public void add(T t) {
-	      elements[N++] = t;
+	      if (N < elements.length) {
+	          elements[N] = t;
+	       } else {
+	    	   int newIncreasedCapacity = elements.length * 2; // snippet from http://www.javamadesoeasy.com/2015/02/arraylist-custom-implementation.html
+	    	    elements = Arrays.copyOf(elements, newIncreasedCapacity); //snippet from http://www.javamadesoeasy.com/2015/02/arraylist-custom-implementation.html
+	    	    elements[N] = t;
+	       }
+	       ++N;
 	 }
-	 @SuppressWarnings("unchecked")
+	
 	public T draw() {
-		 obj = elements[new Random().nextInt(elements.length)];
-		 for(int i = 0; i < N; i++){
-			 if(obj.equals(elements[i])){
-				 elements[i] = elements[--N];
-			 }
-		 }
-		 return (T) obj;
+		Object removedElement=elements[new Random().nextInt(elements.length)];
+	    for(int i=0;i< N;i++){
+	       elements[i]=elements[i+1];
+	    }
+	    N--;
+	   
+	    return (T) removedElement;
 	 }
 	 public boolean isEmpty(){
 		  return N == 0;
